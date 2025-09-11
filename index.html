@@ -6,197 +6,218 @@
   <title>DBU Trello Calculator</title>
   <style>
     body {
+      background-color: #0D1117;
+      color: white;
       font-family: Arial, sans-serif;
-      background-color: #1e1e2f;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      text-align: center;
       padding: 20px;
     }
+
     h1 {
+      color: #FFD700;
       margin-bottom: 20px;
-      color: #ffcc00;
     }
+
     .container {
-      background: #2c2c3c;
+      max-width: 400px;
+      margin: 0 auto;
+      background-color: #161B22;
       padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      width: 300px;
-      text-align: center;
     }
-    select, input, button {
+
+    select, input {
       width: 100%;
-      padding: 8px;
+      padding: 10px;
       margin: 10px 0;
-      border-radius: 5px;
       border: none;
+      border-radius: 5px;
       font-size: 16px;
+      box-sizing: border-box;
     }
-    button {
-      background: #ffcc00;
-      color: #000;
+
+    button, .join-btn {
+      display: inline-block;
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0 0 0;
+      font-size: 16px;
       font-weight: bold;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background 0.3s;
+      text-align: center;
+      text-decoration: none;
+      color: white;
+      box-sizing: border-box;
     }
+
+    button {
+      background-color: #FFD700;
+    }
+
     button:hover {
-      background: #e6b800;
+      background-color: #e6c200;
     }
+
+    .join-btn {
+      background-color: #00bcd4;
+      display: inline-block;
+    }
+
+    .join-btn:hover {
+      background-color: #0097a7;
+    }
+
     p {
-      margin: 5px 0;
-      font-size: 14px;
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-      font-weight: bold;
-      text-align: left;
+      margin: 10px 0;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
   <h1>DBU Trello Calculator</h1>
   <div class="container">
-    <select id="boss"></select>
-    <input type="number" id="rebirths" placeholder="Rebirths">
-    
-    <label for="talents">Do you have talents?</label>
+    <select id="boss">
+      <option>=== Select a boss ===</option>
+      <option>=== Earth ===</option>
+      <option>X Fighter Trainer</option>
+      <option>Krillin</option>
+      <option>Kid Nogah</option>
+      <option>Turtle Student</option>
+      <option>Radish</option>
+      <option>Mapa</option>
+      <option>Citizen</option>
+      <option>Top X Fighter</option>
+      <option>Super Vegetable</option>
+      <option>Kaio Student</option>
+      <option>Chilly</option>
+      <option>Perfect Atom</option>
+      <option>SSJ2 Wukong</option>
+      <option>Kai-fist Master</option>
+      <option>SSJB Wukong</option>
+      <option>Broccoli</option>
+      <option>SSJG Kakata</option>
+      <option>=== Bills Planet ===</option>
+      <option>Vegetable (GoD in training)</option>
+      <option>Wukong (Omen)</option>
+      <option>Vills (50%)</option>
+      <option>Vis (20%)</option>
+      <option>Vegetable (LBSSJ4)</option>
+      <option>Wukong (LBSSJ4)</option>
+      <option>Vekuta (LBSSJ4)</option>
+      <option>Wukong Rose</option>
+      <option>Vekuta (SSJBUI)</option>
+      <option>Wukong (MUI)</option>
+      <option>Vegetable (Ultra Ego)</option>
+      <option>Nohag (Beast)</option>
+      <option>=== T.O.P ===</option>
+      <option>Piclaw (Base)</option>
+      <option>Caula (Base)</option>
+      <option>Gohan (Potential Unlocked)</option>
+    </select>
+
+    <input id="rebirths" type="number" placeholder="Rebirths">
+
+    <label>Do you have talents?</label>
     <select id="talents">
-      <option value="yes">Yes</option>
-      <option value="no">No</option>
+      <option>Yes</option>
+      <option>No</option>
     </select>
-    
+
     <select id="boost">
-      <option value="">No Boost</option>
-      <option value="TwoTime">2x</option>
-      <option value="ThreeTime">3x</option>
-      <option value="FourTime">4x</option>
-      <option value="FiveTime">5x</option>
+      <option>No Boost</option>
+      <option>2x</option>
+      <option>3x</option>
+      <option>4x</option>
     </select>
-    
-    <button id="calculateButton">Calculate</button>
+
+    <button onclick="calculateGain()">Calculate</button>
+    <a href="https://discord.gg/dHz2FZVqpa" target="_blank" class="join-btn">Join Dbu Trello Now!</a>
 
     <p id="result"></p>
-    <p id="reb"></p>
     <p id="punch"></p>
-    <p id="abs"></p>
-    <p id="blast"></p>
+    <p id="defense"></p>
     <p id="speed"></p>
   </div>
 
   <script>
-    const talentsMapping = { yes: 1, no: 0 };
+    const bosses = {
+      "X Fighter Trainer": 1000,
+      "Krillin": 1400,
+      "Kid Nogah": 2000,
+      "Turtle Student": 2500,
+      "Radish": 3200,
+      "Mapa": 4000,
+      "Citizen": 5500,
+      "Top X Fighter": 6000,
+      "Super Vegetable": 8000,
+      "Kaio Student": 10000,
+      "Chilly": 15000,
+      "Perfect Atom": 20000,
+      "SSJ2 Wukong": 25000,
+      "Kai-fist Master": 35000,
+      "SSJB Wukong": 45000,
+      "Broccoli": 70000,
+      "SSJG Kakata": 85000,
+      "Vegetable (GoD in training)": 110000,
+      "Wukong (Omen)": 170000,
+      "Vills (50%)": 245000,
+      "Vis (20%)": 290000,
+      "Vegetable (LBSSJ4)": 330000,
+      "Wukong (LBSSJ4)": 370000,
+      "Vekuta (LBSSJ4)": 420000,
+      "Wukong Rose": 500000,
+      "Vekuta (SSJBUI)": 580000,
+      "Wukong (MUI)": 680000,
+      "Vegetable (Ultra Ego)": 730000,
+      "Nohag (Beast)": 780000,
+      "Piclaw (Base)": 830000,
+      "Caula (Base)": 880000,
+      "Gohan (Potential Unlocked)": 910000
+    };
 
-    function generateBossOptions() {
-      const bosses = {
-        "=== Select a boss ===": "No Value",
-        "=== Earth ===": "No Value",
-        "X Fighter Trainer": 1000,
-        "Krillin": 1400,
-        "Kid Nogah": 2000,
-        "Turtle Student": 2500,
-        "Radish": 3200,
-        "Mapa": 4000,
-        "Citizen": 5500,
-        "Top X Fighter": 6000,
-        "Super Vegetable": 8000,
-        "Kaio Student": 10000,
-        "Chilly": 15000,
-        "Perfect Atom": 20000,
-        "SSJ2 Wukong": 25000,
-        "Kai-fist Master": 35000,
-        "SSJB Wukong": 45000,
-        "Broccoli": 70000,
-        "SSJG Kakata": 85000,
-        "=== Bills Planet ===": "No Value",
-        "Vegetable (GoD in training)": 110000,
-        "Wukong (Omen)": 170000,
-        "Vills (50%)": 245000,
-        "Vis (20%)": 290000,
-        "Vegetable (LBSSJ4)": 330000,
-        "Wukong (LBSSJ4)": 370000,
-        "Vekuta (LBSSJ4)": 420000,
-        "Wukong Rose": 500000,
-        "Vekuta (SSJBUI)": 580000,
-        "Wukong (MUI)": 680000,
-        "Vegetable (Ultra Ego)": 730000,
-        "Nohag (Beast)": 780000,
-        "=== T.O.P ===": "No Value",
-        "Piclaw (Base)": 830000,
-        "Caula (Base)": 880000,
-        "Gohan (Potential Unlocked)": 910000,
-      };
-
-      const bossSelect = document.getElementById("boss");
-      for (const boss in bosses) {
-        const option = document.createElement("option");
-        option.text = boss;
-        option.value = bosses[boss];
-        bossSelect.appendChild(option);
+    function formatNumber(num) {
+      if (num < 1000000) return num.toLocaleString();
+      const units = ["", "Million", "Billion", "Trillion"];
+      let unitIndex = 0;
+      let n = num;
+      while (n >= 1000 && unitIndex < units.length - 1) {
+        n /= 1000;
+        unitIndex++;
       }
+      return num.toLocaleString() + " (" + n.toFixed(1) + " " + units[unitIndex] + ")";
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      generateBossOptions();
-    });
-
-    document.getElementById("calculateButton").addEventListener("click", calculateGain);
-
-    document.addEventListener("keydown", event => {
-      if (event.key === "Enter" || event.key === " ") {
-        calculateGain();
-      }
-    });
-
     function calculateGain() {
-      const rebirths = parseInt(document.getElementById("rebirths").value);
-      const talents = talentsMapping[document.getElementById("talents").value];
+      const boss = document.getElementById("boss").value;
+      const rebirths = parseFloat(document.getElementById("rebirths").value) || 0;
+      const talents = document.getElementById("talents").value === "Yes" ? 2 : 1;
       const boost = document.getElementById("boost").value;
-      const bossSelect = document.getElementById("boss");
-      const boss = parseInt(bossSelect.value);
-      const bossName = bossSelect.options[bossSelect.selectedIndex].text;
+      let boostMultiplier = 1;
 
-      if (isNaN(rebirths) || rebirths < 0) {
-        document.getElementById("result").textContent = "Please enter a valid number for rebirths.";
+      if (boost === "2x") boostMultiplier = 2;
+      if (boost === "3x") boostMultiplier = 3;
+      if (boost === "4x") boostMultiplier = 4;
+
+      if (!bosses[boss]) {
+        document.getElementById("result").innerText = "Please select a valid boss.";
         return;
       }
 
-      if (bossSelect.value === "No Value") {
-        document.getElementById("result").textContent = "Please select a valid boss.";
-        return;
-      }
+      const bossValue = bosses[boss];
+      const rebirthMultiplier = 1 + rebirths * 0.40;
+      const totalMultiplier = rebirthMultiplier * talents * boostMultiplier;
+      const total = bossValue * totalMultiplier;
 
-      let baseMultiplier = 1 + (rebirths * 0.40);
-      let totalMultiplier = baseMultiplier;
+      const punch = totalMultiplier * 30;
+      const defense = totalMultiplier * 120;
+      const speed = totalMultiplier * 22.5;
 
-      if (talents) totalMultiplier += baseMultiplier;
-
-      if (boost === "TwoTime") totalMultiplier += baseMultiplier;
-      else if (boost === "ThreeTime") totalMultiplier += (2 * baseMultiplier);
-      else if (boost === "FourTime") totalMultiplier += (3 * baseMultiplier);
-      else if (boost === "FiveTime") totalMultiplier += (4 * baseMultiplier);
-
-      const finalStats = totalMultiplier * boss;
-      const punchstr = (totalMultiplier * 30).toLocaleString('en-US');
-      const punchspd = (totalMultiplier * 15).toLocaleString('en-US');
-      const abs = (totalMultiplier * 120).toLocaleString('en-US');
-      const speed = (totalMultiplier * 22.5).toLocaleString('en-US');
-
-      function rebirthsNeeded() {
-        let rebs = rebirths <= 1000
-          ? 200000 + (150000 * rebirths)
-          : 200000 + (2000000 * rebirths);
-        return rebs.toLocaleString('en-US');
-      }
-
-      document.getElementById("result").textContent = `${bossName}: ${Math.floor(finalStats).toLocaleString('en-US')} stats!`;
-      document.getElementById("reb").textContent = `Stats needed to rebirth: ${rebirthsNeeded()}`;
-      document.getElementById("punch").textContent = `Punch: ${punchstr} strength and ${punchspd} speed!`;
-      document.getElementById("abs").textContent = `Defense train move: ${abs} defense`;
-      document.getElementById("blast").textContent = `Ki blast: ${punchstr} energy`;
-      document.getElementById("speed").textContent = `Aura boost: ${speed} speed/s`;
+      document.getElementById("result").innerText = "Total stats gained: " + formatNumber(total);
+      document.getElementById("punch").innerText = "Punch: " + formatNumber(punch);
+      document.getElementById("defense").innerText = "Defense: " + formatNumber(defense);
+      document.getElementById("speed").innerText = "Speed: " + formatNumber(speed);
     }
   </script>
 </body>
