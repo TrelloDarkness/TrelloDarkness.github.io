@@ -5,64 +5,94 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DBU Trello Calculator</title>
   <style id="dynamic-theme">
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #1e1e2f;
+    /* Default Neon Dark Theme */
+    body { background-color: #0d0d0d; color: #e0e0e0; font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+    h1 { margin-bottom: 20px; color: #00ffcc; text-shadow: 0 0 8px #00ffcc; }
+    .container { background: #1a1a1a; padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(0, 255, 204, 0.3); border: 1px solid #00ffcc; width: 300px; text-align: center; }
+    select, input, button { width: 100%; padding: 8px; margin: 10px 0; border-radius: 5px; border: none; font-size: 16px; box-sizing: border-box; }
+    button { background: #00ffcc; color: #0d0d0d; font-weight: bold; cursor: pointer; transition: background 0.3s, box-shadow 0.3s; box-shadow: 0 0 8px #00ffcc; }
+    button:hover { background: #00e6b8; box-shadow: 0 0 12px #00ffcc; }
+    p { margin: 5px 0; font-size: 14px; }
+    label { display: block; margin-top: 10px; font-weight: bold; text-align: left; }
+    
+    /* Theme Toggle Button Styles */
+    #theme-toggle-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #333;
       color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-    h1 {
-      margin-bottom: 20px;
-      color: #ffcc00;
-    }
-    .container {
-      background: #2c2c3c;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      width: 300px;
-      text-align: center;
-    }
-    select, input, button {
-      width: 100%;
-      padding: 8px;
-      margin: 10px 0;
-      border-radius: 5px;
-      border: none;
-      font-size: 16px;
-    }
-    button {
-      background: #ffcc00;
-      color: #000;
-      font-weight: bold;
+      border: 1px solid #555;
+      font-size: 24px;
       cursor: pointer;
-      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
     }
-    button:hover {
-      background: #e6b800;
+    
+    /* Theme Panel Styles */
+    #theme-panel {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      background: #2c2c3c;
+      border: 1px solid #444;
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
     }
-    p {
-      margin: 5px 0;
-      font-size: 14px;
-    }
-    label {
-      display: block;
-      margin-top: 10px;
+    .theme-option {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: #fff;
       font-weight: bold;
       text-align: left;
     }
+
+/* Discord Button Styles */
+#discord-button {
+  position: fixed;
+  bottom: 90px; /* more space above the theme button */
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: transform 0.2s;
+  z-index: 1000;
+}
+
+#discord-button:hover {
+  transform: scale(1.1);
+}
+
+#discord-button svg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  fill: var(--accent-color, #5865F2);
+  pointer-events: none;
+}
+
   </style>
 </head>
 <body>
   <h1>DBU Trello Calculator</h1>
-  <label for="themeSelect">Theme:</label>
-  <select id="themeSelect" onchange="setTheme(this.value)">
-    <option value="neon">Neon Dark</option>
-    <option value="cosmic">Cosmic Purple</option>
-  </select>
+
   <div class="container">
     <select id="boss"></select>
     <input type="number" id="rebirths" placeholder="Rebirths">
@@ -91,6 +121,19 @@
     <p id="speed"></p>
   </div>
 
+  
+<!-- Discord Button -->
+<a id="discord-button" href="https://discord.gg/G3S8th78ZG" target="_blank" aria-label="Join our Discord">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 245 240" width="28" height="28" fill="white">
+    <path d="M104.4 104.8c-5.7 0-10.2 5-10.2 11.1s4.6 11.1 10.2 11.1c5.7 0 10.2-5 10.2-11.1.1-6.1-4.5-11.1-10.2-11.1zm36.2 0c-5.7 0-10.2 5-10.2 11.1s4.6 11.1 10.2 11.1c5.7 0 10.2-5 10.2-11.1s-4.5-11.1-10.2-11.1z"/>
+    <path d="M189.5 20h-134C44.2 20 35 29.2 35 40.5v159c0 11.3 9.2 20.5 20.5 20.5h113.3l-5.3-18.4 12.8 11.9 12.1 11.2 21.5 19V40.5c0-11.3-9.2-20.5-20.4-20.5zM163 164s-4.5-5.4-8.2-10.2c16.2-4.6 22.4-14.7 22.4-14.7-5.1 3.3-9.9 5.6-14.2 7.2-6.2 2.6-12.1 4.3-17.9 5.3-11.8 2.2-22.6 1.6-31.9-0.1-7-1.3-13-3-18-5.3-2.8-1.1-5.9-2.5-9-4.4-0.4-0.2-0.8-0.3-1.2-0.5-0.2-0.1-0.3-0.2-0.5-0.3-2.2-1.2-3.4-2.1-3.4-2.1s6 10 21.9 14.7c-3.7 4.8-8.3 10.5-8.3 10.5-27.4-0.9-37.8-18.8-37.8-18.8 0-39.9 17.9-72.3 17.9-72.3 17.9-13.5 34.9-13.1 34.9-13.1l1.2 1.4c-22.4 6.4-32.6 16.3-32.6 16.3s2.7-1.5 7.2-3.6c13.1-5.7 23.5-7.2 27.8-7.6 0.7-0.1 1.3-0.2 2-0.2 7.1-0.9 15.2-1.2 23.5-0.2 11.1 1.3 23 4.7 35.1 11.5 0 0-9.8-9.3-30.9-15.8l1.7-1.9s17-0.4 34.9 13.1c0 0 17.9 32.4 17.9 72.3 0.1 0.1-10.3 17.9-37.7 18.9z"/>
+  </svg>
+</a>
+
+  <button id="theme-toggle-button">☀️</button>
+  <div id="theme-panel"></div>
+
+
   <script>
     const talentsMapping = { yes: 1, no: 0 };
 
@@ -98,42 +141,11 @@
       const bosses = {
         "=== Select a boss ===": "No Value",
         "=== Earth ===": "No Value",
-        "X Fighter Trainer": 1000,
-        "Krillin": 1400,
-        "Kid Nogah": 2000,
-        "Turtle Student": 2500,
-        "Radish": 3200,
-        "Mapa": 4000,
-        "Citizen": 5500,
-        "Top X Fighter": 6000,
-        "Super Vegetable": 8000,
-        "Kaio Student": 10000,
-        "Chilly": 15000,
-        "Perfect Atom": 20000,
-        "SSJ2 Wukong": 25000,
-        "Kai-fist Master": 35000,
-        "SSJB Wukong": 45000,
-        "Broccoli": 70000,
-        "SSJG Kakata": 85000,
+        "X Fighter Trainer": 1000, "Krillin": 1400, "Kid Nogah": 2000, "Turtle Student": 2500, "Radish": 3200, "Mapa": 4000, "Citizen": 5500, "Top X Fighter": 6000, "Super Vegetable": 8000, "Kaio Student": 10000, "Chilly": 15000, "Perfect Atom": 20000, "SSJ2 Wukong": 25000, "Kai-fist Master": 35000, "SSJB Wukong": 45000, "Broccoli": 70000, "SSJG Kakata": 85000,
         "=== Bills Planet ===": "No Value",
-        "Vegetable (GoD in training)": 110000,
-        "Wukong (Omen)": 170000,
-        "Vills (50%)": 245000,
-        "Vis (20%)": 290000,
-        "Vegetable (LBSSJ4)": 330000,
-        "Wukong (LBSSJ4)": 370000,
-        "Vekuta (LBSSJ4)": 420000,
-        "Wukong Rose": 500000,
-        "Vekuta (SSJBUI)": 580000,
-        "Wukong (MUI)": 680000,
-        "Vegetable (Ultra Ego)": 730000,
-        "Nohag (Beast)": 780000,
+        "Vegetable (GoD in training)": 110000, "Wukong (Omen)": 170000, "Vills (50%)": 245000, "Vis (20%)": 290000, "Vegetable (LBSSJ4)": 330000, "Wukong (LBSSJ4)": 370000, "Vekuta (LBSSJ4)": 420000, "Wukong Rose": 500000, "Vekuta (SSJBUI)": 580000, "Wukong (MUI)": 680000, "Vegetable (Ultra Ego)": 730000, "Nohag (Beast)": 780000,
         "=== T.O.P ===": "No Value",
-        "Piclaw (Base)": 830000,
-        "Caula (Base)": 880000,
-        "Gohan (Potential Unlocked)": 910000,
-"Kall (LSSJ)": 960000,
-"SSJBK Wukong": 1010000,
+        "Piclaw (Base)": 830000, "Caula (Base)": 880000, "Gohan (Potential Unlocked)": 910000, "Kall (LSSJ)": 960000, "SSJBK Wukong": 1010000,
       };
 
       const bossSelect = document.getElementById("boss");
@@ -147,10 +159,10 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       generateBossOptions();
+      populateThemePanel();
     });
 
     document.getElementById("calculateButton").addEventListener("click", calculateGain);
-
     document.addEventListener("keydown", event => {
       if (event.key === "Enter" || event.key === " ") {
         calculateGain();
@@ -209,30 +221,84 @@
 
 <script>
   const themes = {
-    neon: `
-      body { background-color: #0d0d0d; color: #e0e0e0; font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-      h1 { margin-bottom: 20px; color: #00ffcc; text-shadow: 0 0 8px #00ffcc; }
-      .container { background: #1a1a1a; padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(0, 255, 204, 0.3); border: 1px solid #00ffcc; width: 300px; text-align: center; }
-      select, input, button { width: 100%; padding: 8px; margin: 10px 0; border-radius: 5px; border: none; font-size: 16px; }
-      button { background: #00ffcc; color: #0d0d0d; font-weight: bold; cursor: pointer; transition: background 0.3s, box-shadow 0.3s; box-shadow: 0 0 8px #00ffcc; }
-      button:hover { background: #00e6b8; box-shadow: 0 0 12px #00ffcc; }
-      p { margin: 5px 0; font-size: 14px; }
-      label { display: block; margin-top: 10px; font-weight: bold; text-align: left; }
-    `,
-    cosmic: `
-      body { background-color: #0b0b1a; color: #d1c4e9; font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-      h1 { margin-bottom: 20px; color: #7c4dff; text-shadow: 0 0 8px #7c4dff; }
-      .container { background: #1c1c3a; padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(124, 77, 255, 0.3); border: 1px solid #7c4dff; width: 300px; text-align: center; }
-      select, input, button { width: 100%; padding: 8px; margin: 10px 0; border-radius: 5px; border: none; font-size: 16px; }
-      button { background: #7c4dff; color: #fff; font-weight: bold; cursor: pointer; transition: background 0.3s, box-shadow 0.3s; }
-      button:hover { background: #651fff; box-shadow: 0 0 12px #7c4dff; }
-      p { margin: 5px 0; font-size: 14px; }
-      label { display: block; margin-top: 10px; font-weight: bold; text-align: left; }
-    `
+    neon: { name: 'Neon Dark', css: `body { background-color: #0d0d0d; color: #e0e0e0; } h1 { color: #00ffcc; text-shadow: 0 0 8px #00ffcc; } .container { background: #1a1a1a; box-shadow: 0 0 15px rgba(0, 255, 204, 0.3); border: 1px solid #00ffcc; } button#calculateButton { background: #00ffcc; color: #0d0d0d; box-shadow: 0 0 8px #00ffcc; } button#calculateButton:hover { background: #00e6b8; box-shadow: 0 0 12px #00ffcc; }` },
+    cosmic: { name: 'Cosmic Purple', css: `body { background-color: #0b0b1a; color: #d1c4e9; } h1 { color: #7c4dff; text-shadow: 0 0 8px #7c4dff; } .container { background: #1c1c3a; box-shadow: 0 0 15px rgba(124, 77, 255, 0.3); border: 1px solid #7c4dff; } button#calculateButton { background: #7c4dff; color: #fff; } button#calculateButton:hover { background: #651fff; box-shadow: 0 0 12px #7c4dff; }` },
+    crimson: { name: 'Crimson Night', css: `body { background-color: #120b0b; color: #f2e9e9; } h1 { color: #e53935; text-shadow: 0 0 8px #e53935; } .container { background: #2d1a1a; box-shadow: 0 0 15px rgba(229, 57, 53, 0.3); border: 1px solid #e53935; } button#calculateButton { background: #e53935; color: #fff; } button#calculateButton:hover { background: #c62828; box-shadow: 0 0 12px #e53935; }` },
+    matrix: { name: 'Emerald Matrix', css: `body { background-color: #051005; color: #39ff14; } h1 { color: #39ff14; text-shadow: 0 0 10px #39ff14; } .container { background: #0a1f0a; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); border: 1px solid #39ff14; } button#calculateButton { background: #39ff14; color: #000; } button#calculateButton:hover { background: #28a700; box-shadow: 0 0 12px #39ff14; }` },
+    cyberpunk: { name: 'Cyber Sunset', css: `body { background-color: #1a0a2b; color: #e1bee7; } h1 { color: #f0f; text-shadow: 0 0 8px #f0f; } .container { background: #2e1a47; box-shadow: 0 0 15px rgba(255, 0, 255, 0.3); border: 1px solid #0ff; } button#calculateButton { background: #f0f; color: #fff; } button#calculateButton:hover { background: #d0d; box-shadow: 0 0 12px #f0f; }` },
+    molten: { name: 'Molten Core', css: `body { background-color: #1c1616; color: #fff3e0; } h1 { color: #ff9800; text-shadow: 0 0 8px #ff9800; } .container { background: #3e2723; box-shadow: 0 0 15px rgba(255, 152, 0, 0.3); border: 1px solid #ff9800; } button#calculateButton { background: #ff9800; color: #000; } button#calculateButton:hover { background: #fb8c00; box-shadow: 0 0 12px #ff9800; }` },
+    arctic: { name: 'Arctic Abyss', css: `body { background-color: #0f1c2b; color: #e3f2fd; } h1 { color: #03a9f4; text-shadow: 0 0 8px #03a9f4; } .container { background: #1c314a; box-shadow: 0 0 15px rgba(3, 169, 244, 0.3); border: 1px solid #03a9f4; } button#calculateButton { background: #03a9f4; color: #000; } button#calculateButton:hover { background: #0288d1; box-shadow: 0 0 12px #03a9f4; }` },
+    gothic: { name: 'Gothic Slate', css: `body { background-color: #263238; color: #eceff1; } h1 { color: #b0bec5; text-shadow: 0 0 8px #b0bec5; } .container { background: #37474f; box-shadow: 0 0 15px rgba(176, 190, 197, 0.3); border: 1px solid #b0bec5; } button#calculateButton { background: #b0bec5; color: #000; } button#calculateButton:hover { background: #90a4ae; box-shadow: 0 0 12px #b0bec5; }` },
+    forest: { name: 'Forest Shadow', css: `body { background-color: #1b1e1b; color: #e8f5e9; } h1 { color: #66bb6a; text-shadow: 0 0 8px #66bb6a; } .container { background: #2e3b2e; box-shadow: 0 0 15px rgba(102, 187, 106, 0.3); border: 1px solid #66bb6a; } button#calculateButton { background: #66bb6a; color: #000; } button#calculateButton:hover { background: #4caf50; box-shadow: 0 0 12px #66bb6a; }` },
+    void: { name: 'Void Black', css: `body { background-color: #000; color: #fff; } h1 { color: #007bff; text-shadow: 0 0 8px #007bff; } .container { background: #111; box-shadow: 0 0 15px rgba(0, 123, 255, 0.3); border: 1px solid #007bff; } button#calculateButton { background: #007bff; color: #fff; } button#calculateButton:hover { background: #0056b3; box-shadow: 0 0 12px #007bff; }` },
+    royal: { name: 'Royal Gold', css: `body { background-color: #141204; color: #fffde7; } h1 { color: #ffd700; text-shadow: 0 0 8px #ffd700; } .container { background: #282408; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); border: 1px solid #ffd700; } button#calculateButton { background: #ffd700; color: #000; } button#calculateButton:hover { background: #e0b800; box-shadow: 0 0 12px #ffd700; }` },
+    blood: { name: 'Blood Moon', css: `body { background-color: #1c0000; color: #ffebee; } h1 { color: #b71c1c; text-shadow: 0 0 8px #b71c1c; } .container { background: #4e0000; box-shadow: 0 0 15px rgba(183, 28, 28, 0.3); border: 1px solid #b71c1c; } button#calculateButton { background: #b71c1c; color: #fff; } button#calculateButton:hover { background: #870000; box-shadow: 0 0 12px #b71c1c; }` }
+  };
+  
+  const baseStyles = `
+    body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; transition: background-color 0.3s, color 0.3s; }
+    h1 { margin-bottom: 20px; transition: color 0.3s; }
+    .container { padding: 20px; border-radius: 10px; width: 300px; text-align: center; transition: background-color 0.3s, box-shadow 0.3s, border 0.3s; }
+    select, input, button { width: 100%; padding: 8px; margin: 10px 0; border-radius: 5px; border: none; font-size: 16px; box-sizing: border-box; }
+    button#calculateButton { font-weight: bold; cursor: pointer; transition: background 0.3s, box-shadow 0.3s, color 0.3s; }
+    p { margin: 5px 0; font-size: 14px; }
+    label { display: block; margin-top: 10px; font-weight: bold; text-align: left; }
+  `;
+
+  function setTheme(themeKey) {
+    if (themes[themeKey]) {
+      document.getElementById("dynamic-theme").innerHTML += baseStyles + themes[themeKey].css;
+      localStorage.setItem('selectedTheme', themeKey); // Optional: save theme choice
+    }
+  }
+
+  function populateThemePanel() {
+    const panel = document.getElementById('theme-panel');
+    for (const key in themes) {
+      const btn = document.createElement('button');
+      btn.className = 'theme-option';
+      btn.textContent = themes[key].name;
+      // Simple styling to preview the theme color on the button itself
+      const accentColor = themes[key].css.match(/h1\s*{\s*color:\s*([^;]+);/)[1];
+      btn.style.backgroundColor = accentColor;
+      btn.onclick = () => {
+        setTheme(key);
+        panel.style.display = 'none';
+      };
+      panel.appendChild(btn);
+    }
+  }
+
+  document.getElementById('theme-toggle-button').addEventListener('click', () => {
+    const panel = document.getElementById('theme-panel');
+    panel.style.display = panel.style.display === 'flex' ? 'none' : 'flex';
+  });
+  
+  
+  // Update Discord button color based on theme accent
+  function updateDiscordButton(themeKey) {
+    const accentColor = themes[themeKey].css.match(/h1\s*{\s*color:\s*([^;]+);/)[1];
+    document.documentElement.style.setProperty('--accent-color', accentColor);
+    // Slightly darker hover version
+    document.documentElement.style.setProperty('--accent-hover-color', accentColor);
+  }
+
+  // Hook into setTheme to also update Discord button color
+  const originalSetTheme = setTheme;
+  setTheme = function(themeKey) {
+    if (themes[themeKey]) {
+      document.getElementById("dynamic-theme").innerHTML += baseStyles + themes[themeKey].css;
+      localStorage.setItem('selectedTheme', themeKey);
+      updateDiscordButton(themeKey);
+    }
   };
 
-  function setTheme(theme) {
-    document.getElementById("dynamic-theme").innerHTML = themes[theme];
+  // Optional: Load saved theme on startup
+  const savedTheme = localStorage.getItem('selectedTheme');
+  if (savedTheme) {
+    setTheme(savedTheme);
+  } else {
+    setTheme('neon'); // Default theme
   }
 </script>
 
