@@ -4,30 +4,144 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DBU Trello Calculator</title>
-  <style id="dynamic-theme">
-    body { background-color: #0d0d0d; color: #e0e0e0; font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-    h1 { margin-bottom: 20px; color: #00ffcc; text-shadow: 0 0 8px #00ffcc; }
-    .container { background: #1a1a1a; padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(0, 255, 204, 0.3); border: 1px solid #00ffcc; width: 300px; text-align: center; }
-    select, input, button { width: 100%; padding: 8px; margin: 10px 0; border-radius: 5px; border: none; font-size: 16px; box-sizing: border-box; }
-    button { background: #00ffcc; color: #0d0d0d; font-weight: bold; cursor: pointer; transition: background 0.3s, box-shadow 0.3s; box-shadow: 0 0 8px #00ffcc; }
-    button:hover { background: #00e6b8; box-shadow: 0 0 12px #00ffcc; }
-    p { margin: 5px 0; font-size: 14px; }
-    label { display: block; margin-top: 10px; font-weight: bold; text-align: left; }
+  <style>
+    /* Global Neon Black Theme */
+    body {
+      background: linear-gradient(135deg, #000000, #0a0a0a, #1a1a1a);
+      color: #e0e0e0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      gap: 30px;
+    }
+
+    h1 {
+      color: #64ffda;
+      text-shadow: 0 0 12px #64ffda;
+      margin-bottom: 40px;
+    }
+
+    /* Menu buttons stacked vertically */
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .menu button {
+      width: 240px;
+      height: 100px;
+      border-radius: 50px; /* circular pill shape */
+      border: none;
+      background: #111;
+      color: #64ffda;
+      font-size: 22px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(100,255,218,0.7);
+      transition: all 0.3s ease;
+    }
+
+    .menu button:hover {
+      background: #64ffda;
+      color: #0a0a0a;
+      box-shadow: 0 0 30px #64ffda;
+    }
+
+    /* Calculator */
+    .calculator {
+      display: none;
+      max-width: 400px;
+      width: 90%;
+      background: #1a1a1a;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 25px rgba(100,255,218,0.3);
+      border: 1px solid #64ffda;
+      margin-top: 20px;
+    }
+
+    .calculator.active {
+      display: block;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+    }
+
+    input, select, button.calc-btn {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    button.calc-btn {
+      background: #64ffda;
+      color: #0a0a0a;
+      font-weight: bold;
+      margin-top: 15px;
+      cursor: pointer;
+      box-shadow: 0 0 12px #64ffda;
+      transition: 0.3s;
+    }
+
+    button.calc-btn:hover {
+      background: #00e6b8;
+      box-shadow: 0 0 20px #64ffda;
+    }
+
+    .back-btn {
+      margin-top: 20px;
+      background: #333;
+      color: #64ffda;
+      box-shadow: 0 0 10px #64ffda;
+    }
   </style>
 </head>
 <body>
+
   <h1>DBU Trello Calculator</h1>
 
-  <div class="container">
+  <!-- Menu -->
+  <div id="menu" class="menu">
+    <button onclick="showCalculator('fusion')">Fusion Calculator</button>
+    <button onclick="showCalculator('stat')">Stat Calculator</button>
+  </div>
+
+  <!-- Fusion Calculator -->
+  <div id="fusion" class="calculator">
+    <h2>Fusion Calculator</h2>
+    <label>Player 1's Stat</label>
+    <input type="text" id="fStat1" placeholder="e.g., 5t or 1.2b">
+    <label>Player 2's Stat</label>
+    <input type="text" id="fStat2" placeholder="e.g., 500m or 950k">
+    <button class="calc-btn" onclick="calculateFusionDance()">Calculate Fusion</button>
+    <button class="calc-btn" onclick="calculatePotara()">Calculate Potara</button>
+    <div id="fusionResult"></div>
+    <button class="calc-btn back-btn" onclick="goBack()">Back to Menu</button>
+  </div>
+
+  <!-- Stat Calculator -->
+  <div id="stat" class="calculator">
+    <h2>Stat Calculator</h2>
     <select id="boss"></select>
     <input type="number" id="rebirths" placeholder="Rebirths">
-    
     <label for="talents">Do you have talents?</label>
     <select id="talents">
       <option value="yes">Yes</option>
       <option value="no">No</option>
     </select>
-    
     <select id="boost">
       <option value="">No Boost</option>
       <option value="TwoTime">2x</option>
@@ -35,25 +149,92 @@
       <option value="FourTime">4x</option>
       <option value="FiveTime">5x</option>
     </select>
-    
-    <button id="calculateButton">Calculate</button>
-
+    <button class="calc-btn" id="calculateButton">Calculate</button>
     <p id="result"></p>
     <p id="reb"></p>
     <p id="punch"></p>
     <p id="abs"></p>
     <p id="blast"></p>
     <p id="speed"></p>
-
-    <!-- New Feature: Bosses Needed -->
     <input type="text" id="targetStats" placeholder="Target Stats (e.g., 20B, 15T, 2QD)">
-    <button id="bossesNeededButton">Calculate Bosses Needed</button>
+    <button class="calc-btn" id="bossesNeededButton">Calculate Bosses Needed</button>
     <p id="bossesNeededResult"></p>
+    <button class="calc-btn back-btn" onclick="goBack()">Back to Menu</button>
   </div>
 
   <script>
-    const talentsMapping = { yes: 1, no: 0 };
+    // Show/hide calculators
+    function showCalculator(id) {
+      document.getElementById('menu').style.display = 'none';
+      document.getElementById(id).classList.add('active');
+    }
+    function goBack() {
+      document.getElementById('fusion').classList.remove('active');
+      document.getElementById('stat').classList.remove('active');
+      document.getElementById('menu').style.display = 'flex';
+    }
 
+    // Fusion Calculator Functions
+    function parseAbbreviatedNumber(input) {
+      if (typeof input !== 'string' || !input) return NaN;
+      const str = input.toLowerCase().trim();
+      const lastChar = str.slice(-1);
+      const lastTwoChars = str.slice(-2);
+      const multipliers = { 'k': 1e3, 'm': 1e6, 'b': 1e9, 't': 1e12, 'qd': 1e15 };
+      let numberPart, multiplier = 1;
+      if (multipliers[lastTwoChars]) {
+        numberPart = parseFloat(str.slice(0, -2));
+        multiplier = multipliers[lastTwoChars];
+      } else if (multipliers[lastChar]) {
+        numberPart = parseFloat(str.slice(0, -1));
+        multiplier = multipliers[lastChar];
+      } else {
+        numberPart = parseFloat(str);
+      }
+      return isNaN(numberPart) ? NaN : numberPart * multiplier;
+    }
+
+    function calculateFusionDance() {
+      const stat1 = parseAbbreviatedNumber(document.getElementById('fStat1').value);
+      const stat2 = parseAbbreviatedNumber(document.getElementById('fStat2').value);
+      const resultDiv = document.getElementById('fusionResult');
+      if (isNaN(stat1) || isNaN(stat2) || stat1 <= 0 || stat2 <= 0) {
+        resultDiv.innerHTML = "Please enter valid positive stats.";
+        return;
+      }
+      const s_small = Math.min(stat1, stat2);
+      const s_large = Math.max(stat1, stat2);
+      const percentage = (s_small / s_large) * 100;
+      let multiplier;
+      if (percentage < 75) multiplier = 0.8;
+      else if (percentage < 90) multiplier = 1.2;
+      else multiplier = 1.5;
+      const total = (stat1 + stat2) * multiplier;
+      resultDiv.innerHTML = `
+        Fusion Type: <b>Fusion Dance</b><br>
+        Compatibility: <b>${percentage.toFixed(1)}%</b> | Multiplier: <b>x${multiplier}</b><br>
+        Total Fused Stat: <b>${total.toLocaleString('en-US')}</b>
+      `;
+    }
+
+    function calculatePotara() {
+      const stat1 = parseAbbreviatedNumber(document.getElementById('fStat1').value);
+      const stat2 = parseAbbreviatedNumber(document.getElementById('fStat2').value);
+      const resultDiv = document.getElementById('fusionResult');
+      if (isNaN(stat1) || isNaN(stat2) || stat1 <= 0 || stat2 <= 0) {
+        resultDiv.innerHTML = "Please enter valid positive stats.";
+        return;
+      }
+      const total = (stat1 + stat2) * 2.5;
+      resultDiv.innerHTML = `
+        Fusion Type: <b>Potara</b><br>
+        Multiplier: <b>x2.5</b><br>
+        Total Fused Stat: <b>${total.toLocaleString('en-US')}</b>
+      `;
+    }
+
+    // Stat Calculator Functions
+    const talentsMapping = { yes: 1, no: 0 };
     function formatNumber(num) {
       if (num >= 1e15) return (num / 1e15).toFixed(2).replace(/\.00$/, '') + "QD";
       if (num >= 1e12) return (num / 1e12).toFixed(2).replace(/\.00$/, '') + "T";
@@ -72,7 +253,6 @@
       else if (str.endsWith("B")) multiplier = 1e9;
       else if (str.endsWith("M")) multiplier = 1e6;
       else if (str.endsWith("K")) multiplier = 1e3;
-
       const numberPart = parseFloat(str.replace(/(QD|T|B|M|K)/, ""));
       return isNaN(numberPart) ? NaN : numberPart * multiplier;
     }
@@ -85,9 +265,8 @@
         "=== Bills Planet ===": "No Value",
         "Vegetable (GoD in training)": 110000, "Wukong (Omen)": 170000, "Vills (50%)": 245000, "Vis (20%)": 290000, "Vegetable (LBSSJ4)": 330000, "Wukong (LBSSJ4)": 370000, "Vekuta (LBSSJ4)": 420000, "Wukong Rose": 500000, "Vekuta (SSJBUI)": 580000, "Wukong (MUI)": 680000, "Vegetable (Ultra Ego)": 730000, "Nohag (Beast)": 780000,
         "=== T.O.P ===": "No Value",
-        "Piclaw (Base)": 830000, "Caula (Base)": 880000, "Gohan (Potential Unlocked)": 910000, "Kall (LSSJ)": 960000, "SSJBK Wukong": 1010000,
+        "Piclaw (Base)": 830000, "Caula (Base)": 880000, "Gohan (Potential Unlocked)": 910000, "Kall (LSSJ)": 960000, "SSJBK Wukong": 1010000
       };
-
       const bossSelect = document.getElementById("boss");
       for (const boss in bosses) {
         const option = document.createElement("option");
@@ -99,10 +278,9 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       generateBossOptions();
+      document.getElementById("calculateButton").addEventListener("click", calculateGain);
+      document.getElementById("bossesNeededButton").addEventListener("click", calculateBossesNeeded);
     });
-
-    document.getElementById("calculateButton").addEventListener("click", calculateGain);
-    document.getElementById("bossesNeededButton").addEventListener("click", calculateBossesNeeded);
 
     function calculateGain() {
       const rebirths = parseInt(document.getElementById("rebirths").value);
@@ -111,46 +289,39 @@
       const bossSelect = document.getElementById("boss");
       const boss = parseInt(bossSelect.value);
       const bossName = bossSelect.options[bossSelect.selectedIndex].text;
-
       if (isNaN(rebirths) || rebirths < 0) {
         document.getElementById("result").textContent = "Please enter a valid number for rebirths.";
         return;
       }
-
       if (bossSelect.value === "No Value") {
         document.getElementById("result").textContent = "Please select a valid boss.";
         return;
       }
-
       let baseMultiplier = 1 + (rebirths * 0.40);
       let totalMultiplier = baseMultiplier;
-
       if (talents) totalMultiplier += baseMultiplier;
-
       if (boost === "TwoTime") totalMultiplier += baseMultiplier;
       else if (boost === "ThreeTime") totalMultiplier += (2 * baseMultiplier);
       else if (boost === "FourTime") totalMultiplier += (3 * baseMultiplier);
       else if (boost === "FiveTime") totalMultiplier += (4 * baseMultiplier);
-
       const finalStats = totalMultiplier * boss;
       const punchstr = formatNumber(totalMultiplier * 30);
       const punchspd = formatNumber(totalMultiplier * 15);
       const abs = formatNumber(totalMultiplier * 120);
       const speed = formatNumber(totalMultiplier * 22.5);
-
       function rebirthsNeeded() {
         let rebs = rebirths <= 1000
           ? 200000 + (150000 * rebirths)
           : 200000 + (2000000 * rebirths);
         return formatNumber(rebs);
       }
-
       document.getElementById("result").textContent = `${bossName}: ${formatNumber(finalStats)} stats!`;
       document.getElementById("reb").textContent = `Stats needed to rebirth: ${rebirthsNeeded()}`;
       document.getElementById("punch").textContent = `Punch: ${punchstr} strength and ${punchspd} speed!`;
       document.getElementById("abs").textContent = `Defense train move: ${abs} defense`;
       document.getElementById("blast").textContent = `Ki blast: ${punchstr} energy`;
-      document.getElementById("speed").textContent = `Aura boost: ${speed} speed/s`;
+      document.getElementById("speed").textContent = `Aura boost: ${speed}
+/s`;
     }
 
     function calculateBossesNeeded() {
