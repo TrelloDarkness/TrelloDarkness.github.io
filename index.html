@@ -198,10 +198,10 @@
             let multiplier;
             if (percentage < 75) {
                 multiplier = 0.8;
-            } else if (percentage > 86) {
-                multiplier = 1.5;
-            } else {
+            } else if (percentage <= 88) {
                 multiplier = 1.2;
+            } else {
+                multiplier = 1.5;
             }
 
             const totalBoostedStat = (stat1 + stat2) * multiplier;
